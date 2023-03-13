@@ -1,12 +1,13 @@
+import dynamic from "next/dynamic";
+
 import Header from "@/components/Header";
 import Sidebar from "@/components/Sidebar";
-
-import dynamic from "next/dynamic";
 
 import { Box, Flex, SimpleGrid, Text, theme } from "@chakra-ui/react";
 
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 import { ApexOptions } from "apexcharts";
+import ptBr from "apexcharts/dist/locales/pt-br.json";
 
 const options: ApexOptions = {
   chart: {
@@ -16,6 +17,8 @@ const options: ApexOptions = {
     zoom: {
       enabled: false,
     },
+    defaultLocale: "pt-br",
+    locales: [ptBr],
     foreColor: theme.colors.gray[500],
   },
   grid: {
