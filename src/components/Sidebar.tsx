@@ -16,14 +16,14 @@ export default function Sidebar() {
           </Text>
 
           <Stack spacing="4" mt="8" align="stretch">
-            <Link display="flex" alignItems="center">
+            <Link href="/dashboard" display="flex" alignItems="center">
               <Icon as={RiDashboardLine} fontSize="20" />
               <Text ml="4" fontWeight="medium">
                 Dashboard
               </Text>
             </Link>
 
-            <Link display="flex" alignItems="center">
+            <Link href="/users" display="flex" alignItems="center">
               <Icon as={RiContactsBookLine} fontSize="20" />
               <Text ml="4" fontWeight="medium">
                 Usuários

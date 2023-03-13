@@ -33,6 +33,7 @@ export default function UsersList() {
             </Heading>
 
             <Button
+              href="/users/create"
               as="a"
               size="sm"
               fontSize="small"
