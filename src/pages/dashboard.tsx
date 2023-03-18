@@ -89,6 +89,7 @@ export default function Dashboard() {
             borderRadius={8}
             pb="4"
             overflow="hidden"
+            maxW={580}
           >
             <Text fontSize="lg" mb="4">
               Inscritos da semana
@@ -98,7 +99,8 @@ export default function Dashboard() {
               series={series}
               type="area"
               height={160}
-              width={500}
+              width="100%"
+              max-width={580}
             />
           </Box>
 
@@ -108,6 +110,7 @@ export default function Dashboard() {
             borderRadius={8}
             pb="4"
             overflow="hidden"
+            maxW={580}
           >
             <Text fontSize="lg" mb="4">
               Taxa de abertura
@@ -117,7 +120,8 @@ export default function Dashboard() {
               series={series}
               type="area"
               height={160}
-              width={500}
+              width="100%"
+              max-width={580}
             />
           </Box>
         </SimpleGrid>
