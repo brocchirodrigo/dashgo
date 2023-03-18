@@ -1,6 +1,13 @@
-import Header from "@/components/Header";
+import Link from "next/link";
+import dynamic from "next/dynamic";
+
+// import Header from "@/components/Header";
+// import Sidebar from "@/components/Sidebar";
+
+const Header = dynamic(() => import("@/components/Header"), { ssr: false });
+const Sidebar = dynamic(() => import("@/components/Sidebar"), { ssr: false });
+
 import { Pagination } from "@/components/Pagination";
-import Sidebar from "@/components/Sidebar";
 import {
   Box,
   Button,
@@ -18,16 +25,12 @@ import {
 } from "@chakra-ui/react";
 import { RiAddLine, RiPencilLine } from "react-icons/ri";
 import { useBreakpointValue } from "@chakra-ui/react";
-import Link from "next/link";
 
 export default function UsersList() {
-  const isWideVersion = useBreakpointValue(
-    {
-      base: false,
-      lg: true,
-    },
-    { ssr: false }
-  );
+  const isWideVersion = useBreakpointValue({
+    base: false,
+    lg: true,
+  });
 
   return (
     <Box>
@@ -42,7 +45,7 @@ export default function UsersList() {
               Usuários
             </Heading>
 
-            <Link href="/users/create" passHref>
+            <Link href="/users/create">
               <Button
                 size="sm"
                 fontSize="small"

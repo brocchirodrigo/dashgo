@@ -1,6 +1,13 @@
+import Link from "next/link";
+import dynamic from "next/dynamic";
+
+// import Header from "@/components/Header";
+// import Sidebar from "@/components/Sidebar";
+
+const Header = dynamic(() => import("@/components/Header"), { ssr: false });
+const Sidebar = dynamic(() => import("@/components/Sidebar"), { ssr: false });
+
 import { Input } from "@/components/Form/Input";
-import Header from "@/components/Header";
-import Sidebar from "@/components/Sidebar";
 import { Button, HStack } from "@chakra-ui/react";
 import {
   Box,
@@ -10,7 +17,6 @@ import {
   SimpleGrid,
   VStack,
 } from "@chakra-ui/react";
-import Link from "next/link";
 
 export default function CreateUser() {
   return (
@@ -44,7 +50,7 @@ export default function CreateUser() {
 
           <Flex mt="8" justify="flex-end">
             <HStack spacing={["4", "4", "4", "8"]}>
-              <Link href="/users" passHref>
+              <Link href="/users">
                 <Button colorScheme="whiteAlpha">Cancelar</Button>
               </Link>
               <Button colorScheme="pink">Salvar</Button>

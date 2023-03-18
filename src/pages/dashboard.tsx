@@ -1,7 +1,10 @@
 import dynamic from "next/dynamic";
 
-import Header from "@/components/Header";
-import Sidebar from "@/components/Sidebar";
+// import Header from "@/components/Header";
+// import Sidebar from "@/components/Sidebar";
+
+const Header = dynamic(() => import("@/components/Header"), { ssr: false });
+const Sidebar = dynamic(() => import("@/components/Sidebar"), { ssr: false });
 
 import { Box, Flex, SimpleGrid, Text, theme } from "@chakra-ui/react";
 
@@ -84,14 +87,26 @@ export default function Dashboard() {
             <Text fontSize="lg" mb="4">
               Inscritos da semana
             </Text>
-            <Chart options={options} series={series} type="area" height={160} />
+            <Chart
+              options={options}
+              series={series}
+              type="area"
+              height={160}
+              width="100%"
+            />
           </Box>
 
           <Box p={["6", "8"]} bg="gray.800" borderRadius={8} pb="4">
             <Text fontSize="lg" mb="4">
               Taxa de abertura
             </Text>
-            <Chart options={options} series={series} type="area" height={160} />
+            <Chart
+              options={options}
+              series={series}
+              type="area"
+              height={160}
+              width="100%"
+            />
           </Box>
         </SimpleGrid>
       </Flex>
