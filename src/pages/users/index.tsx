@@ -21,10 +21,13 @@ import { useBreakpointValue } from "@chakra-ui/react";
 import Link from "next/link";
 
 export default function UsersList() {
-  const isWideVersion = useBreakpointValue({
-    base: false,
-    lg: true,
-  });
+  const isWideVersion = useBreakpointValue(
+    {
+      base: false,
+      lg: true,
+    },
+    { ssr: false }
+  );
 
   return (
     <Box>

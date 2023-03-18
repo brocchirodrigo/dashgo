@@ -14,10 +14,13 @@ import { useSidebarDrawer } from "../../context/SidebarDrawerContext";
 export default function Sidebar() {
   const { isOpen, onClose } = useSidebarDrawer();
 
-  const isDrawerSidebar = useBreakpointValue({
-    base: true,
-    lg: false,
-  });
+  const isDrawerSidebar = useBreakpointValue(
+    {
+      base: true,
+      lg: false,
+    },
+    { ssr: false }
+  );
 
   if (isDrawerSidebar) {
     return (
