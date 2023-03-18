@@ -83,7 +83,13 @@ export default function Dashboard() {
           minChildWidth="320px"
           alignItems="flex-start"
         >
-          <Box p={["6", "8"]} bg="gray.800" borderRadius={8} pb="4">
+          <Box
+            p={["6", "8"]}
+            bg="gray.800"
+            borderRadius={8}
+            pb="4"
+            overflow="hidden"
+          >
             <Text fontSize="lg" mb="4">
               Inscritos da semana
             </Text>
@@ -92,11 +98,17 @@ export default function Dashboard() {
               series={series}
               type="area"
               height={160}
-              width="100%"
+              width={500}
             />
           </Box>
 
-          <Box p={["6", "8"]} bg="gray.800" borderRadius={8} pb="4">
+          <Box
+            p={["6", "8"]}
+            bg="gray.800"
+            borderRadius={8}
+            pb="4"
+            overflow="hidden"
+          >
             <Text fontSize="lg" mb="4">
               Taxa de abertura
             </Text>
@@ -105,7 +117,7 @@ export default function Dashboard() {
               series={series}
               type="area"
               height={160}
-              width="100%"
+              width={500}
             />
           </Box>
         </SimpleGrid>
