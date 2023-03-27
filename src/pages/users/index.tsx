@@ -1,14 +1,6 @@
 import dynamic from "next/dynamic";
 
-import { useQuery } from "react-query";
-
 import Link from "next/link";
-
-// import Header from "@/components/Header";
-// import Sidebar from "@/components/Sidebar";
-
-const Header = dynamic(() => import("@/components/Header"), { ssr: false });
-const Sidebar = dynamic(() => import("@/components/Sidebar"), { ssr: false });
 
 import { Pagination } from "@/components/Pagination";
 
@@ -31,40 +23,14 @@ import {
 
 import { RiAddLine, RiPencilLine, RiRefreshLine } from "react-icons/ri";
 import { useBreakpointValue } from "@chakra-ui/react";
-import { api } from "@/services/api";
 
-type User = {
-  id: string;
-  name: string;
-  email: string;
-  createdAt: string;
-};
+import { UserType, useUsers } from "@/services/hooks/useUsers";
+
+const Header = dynamic(() => import("@/components/Header"), { ssr: false });
+const Sidebar = dynamic(() => import("@/components/Sidebar"), { ssr: false });
 
 export default function UsersList() {
-  const { data, isLoading, error, isFetching, refetch } = useQuery(
-    ["users"],
-    async () => {
-      const { data } = await api.get("/users");
-
-      const users = data.users.map((user: User) => {
-        return {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          createdAt: new Date(user.createdAt).toLocaleDateString("pt-BR", {
-            day: "2-digit",
-            month: "long",
-            year: "numeric",
-          }),
-        };
-      });
-
-      return users;
-    },
-    {
-      staleTime: 1000 * 5, // 5 segundos
-    }
-  );
+  const { data, isLoading, error, isFetching, refetch } = useUsers();
 
   const isWideVersion = useBreakpointValue({
     base: false,
@@ -132,7 +98,7 @@ export default function UsersList() {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {data.map((user: User) => (
+                  {data?.map((user: UserType) => (
                     <Tr key={user.id}>
                       <Td px={["4", "4", "6"]}>
                         <Checkbox colorScheme="pink" />
