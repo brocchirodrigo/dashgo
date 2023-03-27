@@ -29,8 +29,9 @@ import {
   Spinner,
 } from "@chakra-ui/react";
 
-import { RiAddLine, RiPencilLine } from "react-icons/ri";
+import { RiAddLine, RiPencilLine, RiRefreshLine } from "react-icons/ri";
 import { useBreakpointValue } from "@chakra-ui/react";
+import { api } from "@/services/api";
 
 type User = {
   id: string;
@@ -40,12 +41,10 @@ type User = {
 };
 
 export default function UsersList() {
-  const { data, isLoading, error } = useQuery(
+  const { data, isLoading, error, isFetching, refetch } = useQuery(
     ["users"],
     async () => {
-      const response = await fetch("http://localhost:3000/api/users");
-
-      const data = await response.json();
+      const { data } = await api.get("/users");
 
       const users = data.users.map((user: User) => {
         return {
@@ -83,6 +82,20 @@ export default function UsersList() {
           <Flex mb="8" justify="space-between" align="center">
             <Heading size="lg" fontWeight="normal">
               Usuários
+              {!isLoading && isFetching ? (
+                <Spinner size="sm" color="grey.500" ml="4" />
+              ) : (
+                <Button
+                  type="button"
+                  colorScheme="pink"
+                  size="sm"
+                  ml="4"
+                  padding="0"
+                  onClick={() => refetch()}
+                >
+                  <Icon fontSize="lg" m="0" p="0" as={RiRefreshLine} />
+                </Button>
+              )}
             </Heading>
 
             <Link href="/users/create">
