@@ -65,7 +65,9 @@ export function MakeServer({ environment = "test" } = {}) {
 
         // @ts-ignore
         const users: Partial<User[]> = this.serialize(
-          schema.all("user").sort((a, b) => a?.created_at - b?.created_at)
+          schema
+            .all("user")
+            .sort((a, b) => a.created_at.getTime() - b.created_at.getTime())
         ).users.slice(pageStart, pageEnd);
 
         return new Response(200, { "x-total-count": String(total) }, { users });
