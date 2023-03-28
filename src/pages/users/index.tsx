@@ -1,6 +1,6 @@
 import dynamic from "next/dynamic";
 
-import Link from "next/link";
+import NextLink from "next/link";
 
 import { Pagination } from "@/components/Pagination";
 
@@ -19,23 +19,43 @@ import {
   Tr,
   Text,
   Spinner,
+  Link,
 } from "@chakra-ui/react";
 
 import { RiAddLine, RiPencilLine, RiRefreshLine } from "react-icons/ri";
 import { useBreakpointValue } from "@chakra-ui/react";
 
 import { UserType, useUsers } from "@/services/hooks/useUsers";
+import { useState } from "react";
+import { queryClient } from "../../services/queryClient";
+import { api } from "@/services/api";
 
 const Header = dynamic(() => import("@/components/Header"), { ssr: false });
 const Sidebar = dynamic(() => import("@/components/Sidebar"), { ssr: false });
 
 export default function UsersList() {
-  const { data, isLoading, error, isFetching, refetch } = useUsers();
+  const [page, setPage] = useState(1);
+
+  const { data, isLoading, error, isFetching, refetch } = useUsers(page);
 
   const isWideVersion = useBreakpointValue({
     base: false,
     lg: true,
   });
+
+  async function handlePrefetchUser(userId: string | number) {
+    await queryClient.prefetchQuery(
+      ["user", userId],
+      async () => {
+        const response = await api.get(`/users/${userId}`);
+
+        return response.data;
+      },
+      {
+        staleTime: 1000 * 60 * 10, // 10 min
+      }
+    );
+  }
 
   return (
     <Box>
@@ -64,7 +84,7 @@ export default function UsersList() {
               )}
             </Heading>
 
-            <Link href="/users/create">
+            <NextLink href="/users/create">
               <Button
                 size="sm"
                 fontSize="small"
@@ -73,7 +93,7 @@ export default function UsersList() {
               >
                 Criar novo
               </Button>
-            </Link>
+            </NextLink>
           </Flex>
 
           {isLoading ? (
@@ -98,39 +118,52 @@ export default function UsersList() {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {data?.map((user: UserType) => (
-                    <Tr key={user.id}>
-                      <Td px={["4", "4", "6"]}>
-                        <Checkbox colorScheme="pink" />
-                      </Td>
-                      <Td>
-                        <Box>
-                          <Text fontWeight="bold">{user.name}</Text>
-                          <Text fontSize="small" color="gray.300">
-                            {user.email}
-                          </Text>
-                        </Box>
-                      </Td>
-                      {isWideVersion && <Td>{user.createdAt}</Td>}
-                      {isWideVersion && (
-                        <Td>
-                          <Button
-                            as="a"
-                            size="sm"
-                            fontSize="small"
-                            colorScheme="purple"
-                            leftIcon={<Icon fontSize="xm" as={RiPencilLine} />}
-                          >
-                            Editar
-                          </Button>
+                  {!!data &&
+                    data.users.map((user: UserType) => (
+                      <Tr key={user.id}>
+                        <Td px={["4", "4", "6"]}>
+                          <Checkbox colorScheme="pink" />
                         </Td>
-                      )}
-                    </Tr>
-                  ))}
+                        <Td>
+                          <Box>
+                            <Link
+                              color="purple.400"
+                              onMouseEnter={() => handlePrefetchUser(user.id)}
+                            >
+                              <Text fontWeight="bold">{user.name}</Text>
+                            </Link>
+
+                            <Text fontSize="small" color="gray.300">
+                              {user.email}
+                            </Text>
+                          </Box>
+                        </Td>
+                        {isWideVersion && <Td>{user.created_at}</Td>}
+                        {isWideVersion && (
+                          <Td>
+                            <Button
+                              as="a"
+                              size="sm"
+                              fontSize="small"
+                              colorScheme="purple"
+                              leftIcon={
+                                <Icon fontSize="xm" as={RiPencilLine} />
+                              }
+                            >
+                              Editar
+                            </Button>
+                          </Td>
+                        )}
+                      </Tr>
+                    ))}
                 </Tbody>
               </Table>
 
-              <Pagination />
+              <Pagination
+                totalCountOfRegisters={data?.totalCount ?? 1}
+                currentPage={page}
+                onPageChange={setPage}
+              />
             </>
           )}
         </Box>

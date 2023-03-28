@@ -1,4 +1,10 @@
-import { createServer, Factory, Model, Response } from "miragejs";
+import {
+  createServer,
+  Factory,
+  Model,
+  Response,
+  ActiveModelSerializer,
+} from "miragejs";
 import { faker } from "@faker-js/faker";
 
 type User = {
@@ -7,9 +13,15 @@ type User = {
   created_at: string;
 };
 
+const date = new Date();
+
 export function MakeServer({ environment = "test" } = {}) {
   const server = createServer({
     environment,
+
+    serializers: {
+      application: ActiveModelSerializer,
+    },
 
     models: {
       user: Model.extend<Partial<User>>({}),
@@ -23,8 +35,13 @@ export function MakeServer({ environment = "test" } = {}) {
         email() {
           return faker.internet.email().toLowerCase();
         },
-        createdAt() {
-          return faker.date.recent(10, new Date());
+        created_at() {
+          return faker.date.recent(
+            10,
+            new Date(
+              date.getTime() - date.getTimezoneOffset() * 60000
+            ).toISOString()
+          );
         },
       }),
     },
@@ -47,12 +64,14 @@ export function MakeServer({ environment = "test" } = {}) {
         const pageEnd = pageStart + Number(per_page);
 
         // @ts-ignore
-        const users: Partial<User> = this.serialize(
-          schema.all("user")
+        const users: Partial<User[]> = this.serialize(
+          schema.all("user").sort((a, b) => a?.created_at - b?.created_at)
         ).users.slice(pageStart, pageEnd);
 
         return new Response(200, { "x-total-count": String(total) }, { users });
       });
+
+      this.get(`/users/:id`);
       this.post("/users");
 
       this.namespace = "";
