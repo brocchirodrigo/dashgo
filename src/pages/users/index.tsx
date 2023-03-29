@@ -1,3 +1,4 @@
+// import { GetServerSideProps } from "next";
 import dynamic from "next/dynamic";
 
 import NextLink from "next/link";
@@ -171,3 +172,9 @@ export default function UsersList() {
     </Box>
   );
 }
+
+// export const getServerSideProps: GetServerSideProps = async () => {
+//   return {
+//     props: {},
+//   };
+// };

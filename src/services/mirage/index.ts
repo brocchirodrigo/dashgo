@@ -51,6 +51,7 @@ export function MakeServer({ environment = "test" } = {}) {
     },
 
     routes() {
+      this.urlPrefix = "http://localhost:3000";
       this.namespace = "api";
       this.timing = 750;
 
@@ -67,7 +68,7 @@ export function MakeServer({ environment = "test" } = {}) {
         const users: Partial<User[]> = this.serialize(
           schema
             .all("user")
-            .sort((a, b) => a.created_at.getTime() - b.created_at.getTime())
+            .sort((a: any, b: any) => a.created_at - b.created_at)
         ).users.slice(pageStart, pageEnd);
 
         return new Response(200, { "x-total-count": String(total) }, { users });
